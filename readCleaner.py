@@ -2,7 +2,25 @@
 ### this script calls Trimmomatic to clean raw reads
 ###
 
-import os,sys
+import os,sys,time
+
+def proceedChecker():
+
+    '''
+    this function checks that time is not between 10 to 18 h
+    '''
+
+    proceed=False
+    while proceed == False:
+        currentHour=int(time.localtime().tm_hour)
+        if currentHour < 10 or currentHour > 18:
+            proceed=True
+        else:
+            print('current hour is {}. Waiting...'.format(currentHour))
+            time.sleep(10*60) # 10*60 is 10 min
+
+    return None
+    
 
 def trimmomaticCaller(instance):
     
@@ -23,11 +41,14 @@ def trimmomaticCaller(instance):
     outputFile2a=cleanReadsDir+instance+'_ALL2.clean.fastq.gz'
     outputFile2b=cleanReadsDir+instance+'_ALL2.garbage.fastq.gz'
 
-    cmd='time '+javaPath+' -jar '+trimmomaticPath+' PE -threads 4 -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36'%(logFile,inputFile1,inputFile2,outputFile1a,outputFile1b,outputFile2a,outputFile2b,path2Adapter)  
+    cmd='time '+javaPath+' -jar '+trimmomaticPath+' PE -threads 4 -phred33 -trimlog %s %s %s %s %s %s %s ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36'%(logFile,inputFile1,inputFile2,outputFile1a,outputFile1b,outputFile2a,outputFile2b,path2Adapter)
+
+    proceedChecker()
 
     print(cmd)
     os.system(cmd)
     print()
+        
     
     return None
 
