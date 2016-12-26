@@ -19,16 +19,10 @@ def flexibleConverter(tag):
     print(cmd2)
     os.system(cmd2)
 
-    # f.2. checking the quality of the paired-end reads
-    cmd='pearf -1 {}{}_ALL1.clean.fastq -2 {}{}_ALL2.clean.fastq > {}{}.pearf.message.txt'.format(fastaDir,tag,fastaDir,tag,scratchDir,tag)
-    print(cmd)
-    os.system(cmd)
-    
-
     # f.3. actual conversion into FASTA files
     cmd0="awk 'BEGIN{P=1}{if(P==1||P==2){gsub(/^[@]/,\">\");print}; if(P==4)P=0; P++}'"
-    cmd1=' {}{}_ALL1.clean.fastq.filtered.fastq > {}{}_ALL1.fasta'.format(fastaDir,tag,fastaDir,tag)
-    cmd2=' {}{}_ALL2.clean.fastq.filtered.fastq > {}{}_ALL2.fasta'.format(fastaDir,tag,fastaDir,tag)
+    cmd1=' {}{}_ALL1.clean.fastq > {}{}_ALL1.fasta'.format(fastaDir,tag,fastaDir,tag)
+    cmd2=' {}{}_ALL2.clean.fastq > {}{}_ALL2.fasta'.format(fastaDir,tag,fastaDir,tag)
     cmd3=cmd0+cmd1
     cmd4=cmd0+cmd2
     print(cmd3)
